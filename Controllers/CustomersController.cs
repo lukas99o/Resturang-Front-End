@@ -23,12 +23,9 @@ namespace ResturangFrontEnd.Controllers
             var response = await _httpClinet.GetAsync($"{baseUrl}GetAllCustomers");
             var json = await response.Content.ReadAsStringAsync();
 
-            var options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            };
+            Console.WriteLine(json);
 
-            var customerList = JsonSerializer.Deserialize<List<Customer>>(json);
+            var customerList = JsonSerializer.Deserialize<List<Customer>>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
             if (customerList != null)
             {
