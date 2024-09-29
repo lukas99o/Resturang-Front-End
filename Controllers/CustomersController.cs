@@ -3,37 +3,30 @@ using ResturangFrontEnd.Models;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace ResturangFrontEnd.Controllers
 {
     public class CustomersController : Controller
     {
-        private readonly HttpClient _httpClinet;
+        private readonly HttpClient _httpClient;
         private string baseUrl = "https://localhost:7157/";
 
         public CustomersController(HttpClient httpClient)
         {
-            _httpClinet = httpClient;
+            _httpClient = httpClient;
         }
 
         public async Task<IActionResult> Index()
         {
-            ViewData["Title"] = "Customers";
+            ViewData["Title"] = "Customer";
 
-            var response = await _httpClinet.GetAsync($"{baseUrl}GetAllCustomers");
+            var response = await _httpClient.GetAsync($"{baseUrl}api/Customers");
             var json = await response.Content.ReadAsStringAsync();
 
             Console.WriteLine(json);
 
-            var customerList = JsonSerializer.Deserialize<List<Customer>>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-
-            if (customerList != null)
-            {
-                foreach (var customer in customerList)
-                {
-                    Console.WriteLine(customer.Name);
-                }
-            }
+            var customerList = JsonConvert.DeserializeObject<List<Customer>>(json);
 
             return View(customerList);
         }
@@ -53,12 +46,49 @@ namespace ResturangFrontEnd.Controllers
                 return View(customer);
             }
 
-            var json = JsonSerializer.Serialize(customer);
+            var json = JsonConvert.SerializeObject(customer);
 
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await _httpClinet.PostAsync($"{baseUrl}CreateCustomer", content);
+            var response = await _httpClient.PostAsync($"{baseUrl}api/customers/CreateCustomer", content);
 
+            return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> Edit(int customerID)
+        {
+            var response = await _httpClient.GetAsync($"{baseUrl}api/Customers/GetSpecificCustomer/{customerID}");
+
+            var json = await response.Content.ReadAsStringAsync();
+
+            Console.WriteLine(json);
+
+            var customer = JsonConvert.DeserializeObject<Customer>(json);
+
+            return View(customer);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(Customer customer)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(customer);
+            }
+
+            var json = JsonConvert.SerializeObject(customer);
+
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            await _httpClient.PutAsync($"{baseUrl}api/Customers/UpdateCustomer/{customer.CustomerID}", content);
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(int customerID)
+        {
+            var response = await _httpClient.DeleteAsync($"{baseUrl}api/Customers/DeleteCustomer/{customerID}");
             return RedirectToAction("Index");
         }
     }

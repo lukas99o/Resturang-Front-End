@@ -7,10 +7,12 @@
             <h5 class="card-title">@customer.Name</h5>
 
             <p class="card-text">Email: @customer.Email</p>
+            <p class="card-text">Phone Number: @customer.PhoneNumber</p>
             <a asp-controller="Customers" asp-action="Edit" asp-route-id=@customer.CustomerID class="btn btn-warning">Edit</a>
 
+
             <form method="post" asp-action="Delete" style="display:inline;">
-                <input type="hidden" name="id" value="@customer.CustomerID" />
+                <input type="hidden" name="customerID" value="@customer.CustomerID" />
                 <button type="submit" class="btn btn-danger">Delete</button>
             </form>
 
@@ -20,4 +22,3 @@
 
 <a asp-action="Create" asp-controller="Customers" class="btn btn-primary">Create</a>
 
-@*row 13 name can cause error*@
