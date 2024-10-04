@@ -7,12 +7,16 @@ namespace ResturangFrontEnd.Controllers
     {
         public IActionResult Login()
         {
+            ViewData["Title"] = "Login";
+
             return View();
         }
 
         [HttpPost] 
         public IActionResult Login(Login login)
         {
+            ViewData["Title"] = "Login Post";
+
             string hardcodedUsername = "admin";
             string hardcodedPassword = "123";
 
@@ -29,6 +33,7 @@ namespace ResturangFrontEnd.Controllers
 
         public IActionResult Welcome()
         {
+            ViewData["Title"] = "Welcome";
             return View();
         }
     }

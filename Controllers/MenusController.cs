@@ -17,7 +17,7 @@ namespace ResturangFrontEnd.Controllers
 
         public async Task<IActionResult> Index()
         {
-            ViewData["Title"] = "Menu";
+            ViewData["Title"] = "Menus";
 
             var response = await _httpClient.GetAsync($"{baseUrl}api/Menus");
             var json = await response.Content.ReadAsStringAsync();
@@ -31,7 +31,7 @@ namespace ResturangFrontEnd.Controllers
 
         public IActionResult Create()
         {
-            ViewData["Title"] = "New Menu";
+            ViewData["Title"] = "Create Menu";
 
             return View();
         }
@@ -39,6 +39,8 @@ namespace ResturangFrontEnd.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(Menu menu)
         {
+            ViewData["Title"] = "Create Menu Post";
+
             if (!ModelState.IsValid)
             {
                 return View(menu);
@@ -53,9 +55,11 @@ namespace ResturangFrontEnd.Controllers
             return RedirectToAction("Index");
         }
 
-        public async Task<IActionResult> Edit(int menuID)
+        public async Task<IActionResult> Edit(int id)
         {
-            var response = await _httpClient.GetAsync($"{baseUrl}api/Menus/UpdateMenu/{menuID}");
+            ViewData["Title"] = "Edit Menu";
+
+            var response = await _httpClient.GetAsync($"{baseUrl}api/Menus/GetSpecificMenu/{id}");
 
             var json = await response.Content.ReadAsStringAsync();
 
@@ -69,6 +73,8 @@ namespace ResturangFrontEnd.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(Menu menu)
         {
+            ViewData["Title"] = "Edit Menu Post";
+
             if (!ModelState.IsValid)
             {
                 return View(menu);
@@ -86,6 +92,8 @@ namespace ResturangFrontEnd.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(int menuID)
         {
+            ViewData["Title"] = "Delete Menu Post";
+
             var response = await _httpClient.DeleteAsync($"{baseUrl}api/Menus/DeleteMenu/{menuID}");
             return RedirectToAction("Index");
         }

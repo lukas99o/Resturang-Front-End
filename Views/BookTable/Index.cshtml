@@ -1,0 +1,18 @@
+﻿@model List<Table>
+
+<h1>Book a table:</h1>
+
+@foreach (var table in Model)
+{
+    @if (table.IsAvailable)
+    {
+        <div class="card" style="width:18rem">
+            <div class="card-body">
+                <h5 class="card-title">Table Number: @table.TableID</h5>
+                <p class="card-text">Table Seats: @table.TableSeats</p>
+                <a asp-action="Book" asp-route-id="@table.TableID" asp-controller="BookTable" class="btn btn-primary">Book now</a>
+            </div>
+        </div>
+    }
+}
+

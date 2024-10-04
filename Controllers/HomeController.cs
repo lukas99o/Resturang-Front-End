@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using ResturangFrontEnd.Models;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 
 namespace ResturangFrontEnd.Controllers
@@ -7,15 +9,26 @@ namespace ResturangFrontEnd.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly HttpClient _httpClient;
+        private string baseUrl = "https://localhost:7157/";
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, HttpClient httpClient)
         {
             _logger = logger;
+            _httpClient = httpClient;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            ViewData["Title"] = "Restaurant Kifo - Home";
+
+            var response = await _httpClient.GetAsync($"{baseUrl}api/MenuItems");
+
+            var json = await response.Content.ReadAsStringAsync();
+
+            var menuItemList = JsonConvert.DeserializeObject<List<MenuItem>>(json);
+
+            return View(menuItemList);
         }
 
         public IActionResult Privacy()

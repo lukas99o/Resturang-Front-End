@@ -19,12 +19,10 @@ namespace ResturangFrontEnd.Controllers
 
         public async Task<IActionResult> Index()
         {
-            ViewData["Title"] = "Customer";
+            ViewData["Title"] = "Customers";
 
             var response = await _httpClient.GetAsync($"{baseUrl}api/Customers");
             var json = await response.Content.ReadAsStringAsync();
-
-            Console.WriteLine(json);
 
             var customerList = JsonConvert.DeserializeObject<List<Customer>>(json);
 
@@ -33,7 +31,7 @@ namespace ResturangFrontEnd.Controllers
 
         public IActionResult Create()
         {
-            ViewData["Title"] = "New Customer";
+            ViewData["Title"] = "Create Customer";
 
             return View();
         }
@@ -41,6 +39,8 @@ namespace ResturangFrontEnd.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(Customer customer)
         {
+            ViewData["Title"] = "Create Customer Post";
+
             if (!ModelState.IsValid)
             {
                 return View(customer);
@@ -55,9 +55,11 @@ namespace ResturangFrontEnd.Controllers
             return RedirectToAction("Index");
         }
 
-        public async Task<IActionResult> Edit(int customerID)
+        public async Task<IActionResult> Edit(int id)
         {
-            var response = await _httpClient.GetAsync($"{baseUrl}api/Customers/GetSpecificCustomer/{customerID}");
+            ViewData["Title"] = "Edit Customer";
+
+            var response = await _httpClient.GetAsync($"{baseUrl}api/Customers/GetSpecificCustomer/{id}");
 
             var json = await response.Content.ReadAsStringAsync();
 
@@ -71,6 +73,8 @@ namespace ResturangFrontEnd.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(Customer customer)
         {
+            ViewData["Title"] = "Edit Customer Post";
+
             if (!ModelState.IsValid)
             {
                 return View(customer);
@@ -88,6 +92,8 @@ namespace ResturangFrontEnd.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(int customerID)
         {
+            ViewData["Title"] = "Delete Customer Post";
+
             var response = await _httpClient.DeleteAsync($"{baseUrl}api/Customers/DeleteCustomer/{customerID}");
             return RedirectToAction("Index");
         }

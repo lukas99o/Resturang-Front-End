@@ -1,5 +1,7 @@
 ﻿@model Customer 
 
+<a asp-action="Index" asp-controller="Customers" class="btn btn-primary">Return</a>
+
 <h1>Create New Customer</h1>
 
 <form asp-action="Create" method="post">
@@ -18,4 +20,6 @@
         <input asp-for="PhoneNumber" class="form-control" />
         <span asp-validation-for="PhoneNumber" class="text-danger"></span>
     </div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
 </form>

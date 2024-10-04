@@ -21,9 +21,6 @@ namespace ResturangFrontEnd.Controllers
 
             var response = await _httpClient.GetAsync($"{baseUrl}api/Tables");
             var json = await response.Content.ReadAsStringAsync();
-
-            Console.WriteLine(json);
-
             var TableList = JsonConvert.DeserializeObject<List<Table>>(json);
 
             return View(TableList);
@@ -31,7 +28,7 @@ namespace ResturangFrontEnd.Controllers
 
         public IActionResult Create()
         {
-            ViewData["Title"] = "New Table";
+            ViewData["Title"] = "Create Table";
 
             return View();
         }
@@ -39,6 +36,8 @@ namespace ResturangFrontEnd.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(Table table)
         {
+            ViewData["Title"] = "Create Table Post";
+
             if (!ModelState.IsValid)
             {
                 return View(table);
@@ -53,20 +52,24 @@ namespace ResturangFrontEnd.Controllers
             return RedirectToAction("Index");
         }
 
-        public async Task<IActionResult> Edit(int tableID)
+        public async Task<IActionResult> Edit(int id)
         {
-            var response = await _httpClient.GetAsync($"{baseUrl}api/Tables/GetSpecificTable/{tableID}");
+            ViewData["Title"] = "Edit Table";
 
+            var response = await _httpClient.GetAsync($"{baseUrl}api/Tables/GetSpecificTable/{id}");
+            Console.WriteLine(response);
             var json = await response.Content.ReadAsStringAsync();
-
+            Console.WriteLine(json);
             var table = JsonConvert.DeserializeObject<Table>(json);
-
+            Console.WriteLine(table);
             return View(table);
         }
 
         [HttpPost]
         public async Task<IActionResult> Edit(Table table)
         {
+            ViewData["Title"] = "Edit Table Post";
+
             if (!ModelState.IsValid)
             {
                 foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
@@ -89,6 +92,8 @@ namespace ResturangFrontEnd.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(int tableID)
         {
+            ViewData["Title"] = "Delete Table Post";
+
             var response = await _httpClient.DeleteAsync($"{baseUrl}api/Tables/DeleteTable/{tableID}");
 
             return RedirectToAction("Index");

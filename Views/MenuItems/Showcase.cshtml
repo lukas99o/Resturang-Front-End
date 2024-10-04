@@ -1,0 +1,49 @@
+﻿@model List<MenuItem>
+
+<h1 class="text-center">Our food and drinks</h1>
+
+<div class="container">
+    <h2 class="my-4 text-primary">Dishes</h2>
+    <div class="row">
+        @foreach (var food in Model)
+        {
+            @if (food.MenuID == 1)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-lg" style="border: 2px solid #007bff;">
+                        <div class="card-body bg-light">
+                            <h5 class="card-title text-info">@food.Name</h5>
+                            <p class="card-text text-success">Price: @food.Price</p>
+                            <p class="card-text text-secondary">Description: @food.Description</p>
+                        </div>
+                        <div class="card-footer bg-primary text-white">
+                            <button class="btn btn-light btn-sm">Order Now</button>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+
+    <h2 class="my-4 text-success">Drinks</h2>
+    <div class="row">
+        @foreach (var drink in Model)
+        {
+            @if (drink.MenuID == 2)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-lg" style="border: 2px solid #28a745;">
+                        <div class="card-body bg-light">
+                            <h5 class="card-title text-success">@drink.Name</h5>
+                            <p class="card-text text-info">Price: @drink.Price</p>
+                            <p class="card-text text-secondary">Description: @drink.Description</p>
+                        </div>
+                        <div class="card-footer bg-success text-white">
+                            <button class="btn btn-light btn-sm">Order Now</button>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
